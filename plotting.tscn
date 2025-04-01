@@ -1,0 +1,129 @@
+[gd_scene load_steps=7 format=3 uid="uid://dyqo5dped1gg6"]
+
+[ext_resource type="Script" path="res://plotting.gd" id="1_eard4"]
+[ext_resource type="Script" path="res://graph.gd" id="1_pd7n8"]
+[ext_resource type="PackedScene" uid="uid://8utpimiylbp5" path="res://values.tscn" id="2_d1j1t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fp1uh"]
+bg_color = Color(0.489622, 0.489622, 0.489622, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xo4sx"]
+content_margin_left = 10.0
+content_margin_top = 0.0
+content_margin_right = 10.0
+content_margin_bottom = 0.0
+bg_color = Color(0.775063, 0.775063, 0.775063, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 10
+expand_margin_left = 8.0
+expand_margin_top = 10.0
+expand_margin_right = 8.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_syrst"]
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Plotting" type="Node2D"]
+script = ExtResource("1_eard4")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1279.0
+offset_bottom = 719.0
+
+[node name="Background" type="ColorRect" parent="Control"]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -639.5
+offset_right = 640.5
+offset_bottom = 720.0
+grow_horizontal = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Control/SubViewportContainer"]
+unique_name_in_owner = true
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="Graph" type="Node2D" parent="Control/SubViewportContainer/SubViewport"]
+position = Vector2(10, 700)
+scale = Vector2(1, -1)
+script = ExtResource("1_pd7n8")
+values_scene = ExtResource("2_d1j1t")
+
+[node name="PlotTimer" type="Timer" parent="Control/SubViewportContainer/SubViewport/Graph"]
+
+[node name="UI" type="Control" parent="Control/SubViewportContainer/SubViewport"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 700.0
+offset_right = 50.0
+offset_bottom = 740.0
+
+[node name="PlotScroll" type="HScrollBar" parent="Control/SubViewportContainer/SubViewport/UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 750.0
+offset_top = -675.0
+offset_right = 1200.0
+offset_bottom = -655.0
+grow_horizontal = 0
+theme_override_styles/scroll = SubResource("StyleBoxFlat_fp1uh")
+theme_override_styles/scroll_focus = SubResource("StyleBoxFlat_fp1uh")
+theme_override_styles/grabber = SubResource("StyleBoxFlat_xo4sx")
+theme_override_styles/grabber_highlight = SubResource("StyleBoxFlat_xo4sx")
+theme_override_styles/grabber_pressed = SubResource("StyleBoxFlat_xo4sx")
+
+[node name="Label" type="Label" parent="Control/SubViewportContainer/SubViewport/UI/PlotScroll"]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 40.0
+offset_bottom = 53.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "t = 10"
+
+[node name="PlayAnimation" type="CheckButton" parent="Control/SubViewportContainer/SubViewport/UI"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = -620.0
+offset_right = 1180.0
+offset_bottom = -580.0
+scale = Vector2(2, 2)
+theme_override_styles/focus = SubResource("StyleBoxFlat_syrst")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_syrst")
+theme_override_styles/hover = SubResource("StyleBoxFlat_syrst")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_syrst")
+theme_override_styles/normal = SubResource("StyleBoxFlat_syrst")
+button_pressed = true
+text = "Play"
+alignment = 1
+
+[connection signal="timeout" from="Control/SubViewportContainer/SubViewport/Graph/PlotTimer" to="Control/SubViewportContainer/SubViewport/Graph" method="_on_plot_timer_timeout"]
