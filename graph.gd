@@ -23,13 +23,14 @@ func linspace(init, end, step):
 
 @export_category("General Inputs")
 @export var plotting_process : plotting = plotting.OFF
-@export var x_list: PackedFloat32Array = linspace(0.,1., 0.01)
-@export var y_list: PackedFloat32Array = linspace(0.,1., 0.01)
+@export var x_list: Array = linspace(0.,1., 0.01)
+@export var y_list: Array = linspace(0.,1., 0.01)
 @export var function: Callable
 @export var automatic_axis: possible_axis = possible_axis.AUTOMATIC
 @export var x_axis_array: Array = [-1,1]
 @export var y_axis_array: Array = [-1,1]
 @export var grid_lines = true
+@export var graph_color: Color = Color.ROYAL_BLUE
 
 @export_category("Animate Inputs")
 @export var animated_plotting = false
@@ -202,7 +203,7 @@ func plot(x_li, y_li) -> void: #Plot a y(x) function along x_l
 			min_y = y_axis_array[0]*scale_vec.y
 			max_y = y_axis_array[1]*scale_vec.y
 
-	draw_polyline(create_curve(x_l, y_l), Color.ROYAL_BLUE, 0.008*e_y)
+	draw_polyline(create_curve(x_l, y_l), graph_color, 0.008*e_y)
 	axis(min_x, max_x, min_y, max_y, scale_vec)
 	pass
 
@@ -212,6 +213,7 @@ func animated_plot(x_l: Array, t_l: Array) -> void: #Plot a y(x,t) along x_l var
 
 func animated_plot_list(x_l_2d: Array, y_l_2d: Array) -> void:
 	plot(x_l_2d[count], y_l_2d[count])
+	pass
 
 func _draw() -> void:
 	if plotting_process == plotting.PLOT:
@@ -225,9 +227,10 @@ func _draw() -> void:
 	pass
 
 
+
 func _ready() -> void:
 	if plotting_process != plotting.OFF:
-		if plotting_process == plotting.ANIMATEDPLOT: #Correcting start effects for animated plotting
+		if plotting_process == plotting.ANIMATEDPLOT or plotting_process == plotting.ANIMATEDLISTPLOT: #Correcting start effects for animated plotting
 			animated_plotting = true
 			ui.visible = true
 			plot_timer.wait_time = delta_t
