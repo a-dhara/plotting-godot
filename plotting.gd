@@ -128,7 +128,6 @@ func _ready() -> void:
 #	animated_plot((func(x,t): return cos(3*x + 4*t)*cos(4*x-3*t)).call, [0.1, 6*PI, 0.001], [0., 5., 0.01], [])
 #	var x_test = linspace(0.,2*PI, 0.01)
 #	var tl: Array = linspace(0,2*PI, 0.01)
-#	plot(tan, [-2*PI,2*PI,0.01])
 #	plot_lists(my_function(tl)[0], my_function(tl)[1])
 #	aspect_ratio = 1.
 #	animated_plot_lists(my_function(2*PI)[1], my_function(2*PI)[0])
